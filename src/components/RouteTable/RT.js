@@ -56,6 +56,15 @@ module.exports = React.createClass({
         "country": "Ecuador",
         "company": "Isologica",
         "favoriteNumber": 2
+      },
+      {
+        "id": 5,
+        "name": "Shaw Lowe",
+        "city": "Coultervillle",
+        "state": "Wyoming",
+        "country": "Ecuador",
+        "company": "Isologica",
+        "favoriteNumber": 2
       }
     ];
     this.setState({Data: Data});
@@ -63,8 +72,7 @@ module.exports = React.createClass({
   render: function () {
     return (
       /* jshint ignore:start */
-      <Griddle results={this.state.Data} tableClassName="table" showFilter={true}
-        showSettings={true} columns={["name", "city", "state", "country"]} />
+      <Griddle results={this.state.Data} tableClassName="table" columns={["id","name", "city", "state", "country"]} />
       /* jshint ignore:end */
     );
   }

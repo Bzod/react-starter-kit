@@ -59,13 +59,16 @@ var Application = React.createClass({
             <h2>{page.title}</h2>
           </div>
           }
+        {
+        this.props.path != '/map' &&
         <ContentPage className="container" {...page}/>
+          }
         {
           this.props.path != '/map' &&
         <div className="navbar-footer">
           <div className="container">
             <p className="text-muted">
-              <span>© KriaSoft</span>
+              <span>© MobileRoute</span>
               <span><a href="/">Home</a></span>
               <span><a href="/privacy">Privacy</a></span>
             </p>

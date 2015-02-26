@@ -20,7 +20,7 @@ var ContentPage = React.createClass({
     var { className, title, body, other } = this.props;
 
     /* jshint ignore:start */
-    return <div className={'ContentPage ' + className}
+    return <main className={'ContentPage ' + className}
       dangerouslySetInnerHTML={{__html: body}} />;
     /* jshint ignore:end */
   }

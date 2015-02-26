@@ -18,9 +18,12 @@ var Aside = React.createClass({
       <aside>
         <div className="nav-collapse" id="sidebar">
           <ul className="sidebar-menu" id="nav-accordion">
-            <li><a className="logout" href="/privacy">Logout</a></li>
-            <li><a className="logout" href="/map">Map</a></li>
-            <li><a className="logout" href="/profile">Profile</a></li>
+            <li><a className="glyphicon glyphicon-map-marker" href="/map"> Map</a></li>
+            <li><a className="glyphicon glyphicon-tasks" href="/tasks"> Tasks</a></li>
+            <li><a className="glyphicon glyphicon-user" href="/profile"> Profile</a></li>
+            <li><a className="glyphicon glyphicon-calendar" href="/calendar"> Calendar</a></li>
+            <li><a className="glyphicon glyphicon-comment" href="/Chat"> Chat</a></li>
+            <li><a className="glyphicon glyphicon-text-size" href="/privacy"> Privacy</a></li>
           </ul>
         </div>
       </aside>
