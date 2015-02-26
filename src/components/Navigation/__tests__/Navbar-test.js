@@ -10,7 +10,7 @@
 
 'use strict';
 
-jest.dontMock('../Navbar');
+jest.dontMock('../Navigation');
 
 describe('Navbar', function() {
 
@@ -18,7 +18,7 @@ describe('Navbar', function() {
     var React = require('react/addons');
     var TestUtils = React.addons.TestUtils;
 
-    var Navbar = require('../Navbar');
+    var Navbar = require('../Navigation');
     var Component = TestUtils.renderIntoDocument(React.createElement(Navbar));
 
     var element = TestUtils.findRenderedDOMComponentWithClass(Component, 'navbar-top');

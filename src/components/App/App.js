@@ -15,9 +15,12 @@ import invariant from 'react/lib/invariant';
 import AppActions from '../../actions/AppActions';
 import NavigationMixin from './NavigationMixin';
 import AppStore from '../../stores/AppStore';
-import Navbar from '../Navbar';
+import Navbar from '../Navigation';
 import ContentPage from '../ContentPage';
 import NotFoundPage from '../NotFoundPage';
+import AsidePanel from '../AsidePanel';
+import Map from '../OSMap';
+import RT from '../RouteTable/RT';
 
 var Application = React.createClass({
 
@@ -44,19 +47,21 @@ var Application = React.createClass({
       /* jshint ignore:start */
       <div className="App">
         <Navbar />
+        <AsidePanel/>
+
         {
-          this.props.path === '/' ?
-          <div className="jumbotron">
-            <div className="container text-center">
-              <h1>React</h1>
-              <p>Complex web apps made easy</p>
-            </div>
-          </div> :
+        this.props.path === '/map' ?
+          <div className="map-container">
+            <Map/>
+            <RT/>
+          </div>:
           <div className="container">
             <h2>{page.title}</h2>
           </div>
-        }
-        <ContentPage className="container" {...page} />
+          }
+        <ContentPage className="container" {...page}/>
+        {
+          this.props.path != '/map' &&
         <div className="navbar-footer">
           <div className="container">
             <p className="text-muted">
@@ -66,6 +71,7 @@ var Application = React.createClass({
             </p>
           </div>
         </div>
+        }
       </div>
       /* jshint ignore:end */
     );

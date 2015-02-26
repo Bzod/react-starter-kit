@@ -1,9 +1,9 @@
 {
-  "name": "react-starter-kit",
+  "name": "MobileRoute",
   "private": true,
   "version": "0.0.0",
-  "description": "React / Flux  Starter Kit",
-  "repository": "https://github.com/kriasoft/react-starter-kit",
+  "description": "React / MobileRoute App",
+  "repository": "",
   "license": "MIT",
   "engines": {
     "node": ">= 0.10",
@@ -16,10 +16,12 @@
     "express": "4.11.2",
     "flux": "2.0.1",
     "front-matter": "0.2.1",
+    "griddle-react": "^0.2.4",
     "jade": "1.9.2",
     "lodash": "3.2.0",
     "react": "0.12.2",
-    "superagent": "0.21.0"
+    "superagent": "0.21.0",
+    "underscore": "^1.8.2"
   },
   "devDependencies": {
     "autoprefixer-loader": "^1.1.0",

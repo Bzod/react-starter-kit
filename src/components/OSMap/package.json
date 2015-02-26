@@ -1,6 +1,6 @@
 {
-  "name": "Navbar",
+  "name": "OSMap",
   "version": "0.0.0",
   "private": true,
-  "main": "./Navbar.js"
+  "main": "./OSMap.js"
 }
