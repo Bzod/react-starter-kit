@@ -22,8 +22,8 @@ import AsidePanel from '../AsidePanel';
 import Map from '../OSMap';
 import RT from '../RouteTable/RT';
 
-var Application = React.createClass({
 
+var Application = React.createClass({
   mixins: [NavigationMixin],
 
   propTypes: {
@@ -42,13 +42,16 @@ var Application = React.createClass({
       this.props.onPageNotFound();
       return React.createElement(NotFoundPage, page);
     }
-
     return (
       /* jshint ignore:start */
-      <div className="App">
-        <Navbar />
-        <AsidePanel/>
 
+      <div className="App">
+      {this.props.path != '/' &&
+        <div className="navigation">
+            <Navbar/>
+            <AsidePanel/>
+        </div>
+        }
         {
         this.props.path === '/map' ?
           <div className="map-container">

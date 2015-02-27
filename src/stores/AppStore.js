@@ -22,6 +22,7 @@ var _loading = false;
 if (__SERVER__) {
   _pages['/'] = {title: 'Home Page'};
   _pages['/privacy'] = {title: 'Privacy Policy'};
+  _pages['/map'] = {title: 'Map'};
 }
 
 var AppStore = assign({}, EventEmitter.prototype, {
@@ -86,7 +87,7 @@ AppStore.dispatcherToken = Dispatcher.register((payload) => {
 
     default:
       // Do nothing
-
+console.log(PayloadSources)
   }
 
 });
