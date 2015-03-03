@@ -1,15 +1,4 @@
-/*
- * React.js Starter Kit
- * Copyright (c) 2014 Konstantin Tarkus (@koistya), KriaSoft LLC.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 'use strict';
-
-import './App.less';
-
 import React from 'react';
 import invariant from 'react/lib/invariant';
 import AppActions from '../../actions/AppActions';
@@ -21,8 +10,12 @@ import NotFoundPage from '../NotFoundPage';
 import AsidePanel from '../AsidePanel';
 import Map from '../OSMap';
 import RT from '../RouteTable/RT';
+import ChatApp from '../Chat';
+import ChatExampleData from '../Chat/ChatExampleData';
+import ChatWebAPIUtils from '../utils/ChatWebAPIUtils';
 
 
+ChatWebAPIUtils.getAllMessages();
 var Application = React.createClass({
   mixins: [NavigationMixin],
 
@@ -46,6 +39,8 @@ var Application = React.createClass({
       /* jshint ignore:start */
 
       <div className="App">
+      {this.props.path === '/chat' &&
+        <ChatApp/>}
       {this.props.path != '/' &&
         <div className="navigation">
             <Navbar/>
