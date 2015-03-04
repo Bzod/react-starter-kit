@@ -10,13 +10,24 @@ import NotFoundPage from '../NotFoundPage';
 import AsidePanel from '../AsidePanel';
 import Map from '../OSMap';
 import RT from '../RouteTable/RT';
-import ChatApp from '../Chat';
-import ChatExampleData from '../Chat/ChatExampleData';
-import ChatWebAPIUtils from '../utils/ChatWebAPIUtils';
+import WebSocket from 'websocket';
+WebSocket = WebSocket.w3cwebsocket;
 
 
 ChatWebAPIUtils.getAllMessages();
 var Application = React.createClass({
+  SendAuth: function () {
+    var ws = new WebSocket("ws://185.49.69.143:20080");
+    ws.onopen = function () {
+      console.log('conected');
+      ws.send(JSON.stringify({"pid": 1, "method": "auth.login", "data": {"login": "Anton", "password": "pass123"}}));
+    };
+    ws.onmessage = function (message) {
+      var str = message.data.substring(0, message.data.length - 1);
+      console.log(JSON.parse(str))
+    };
+  },
+
   mixins: [NavigationMixin],
 
   propTypes: {
@@ -25,7 +36,9 @@ var Application = React.createClass({
     onSetMeta: React.PropTypes.func.isRequired,
     onPageNotFound: React.PropTypes.func.isRequired
   },
-
+  componentWillMount: function () {
+    this.SendAuth();
+  },
   render() {
     var page = AppStore.getPage(this.props.path);
     invariant(page !== undefined, 'Failed to load page content.');
@@ -36,11 +49,10 @@ var Application = React.createClass({
       return React.createElement(NotFoundPage, page);
     }
     return (
+        //React.DOM.input( {type:"submit", value:"Refresh", onClick:this.SendAuth} )
       /* jshint ignore:start */
 
       <div className="App">
-      {this.props.path === '/chat' &&
-        <ChatApp/>}
       {this.props.path != '/' &&
         <div className="navigation">
             <Navbar/>

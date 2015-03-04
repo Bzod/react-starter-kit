@@ -3,7 +3,6 @@
 import React from 'react';
 
 var HomePage = React.createClass({
-
   propTypes: {
     body: React.PropTypes.string.isRequired
   },

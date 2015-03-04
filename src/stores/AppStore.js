@@ -23,7 +23,6 @@ if (__SERVER__) {
   _pages['/'] = {title: 'Home Page'};
   _pages['/privacy'] = {title: 'Privacy Policy'};
   _pages['/map'] = {title: 'Map'};
-  _pages['/chat'] = {title: 'Chat'};
 }
 
 var AppStore = assign({}, EventEmitter.prototype, {
