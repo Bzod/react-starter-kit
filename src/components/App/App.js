@@ -14,7 +14,6 @@ import WebSocket from 'websocket';
 WebSocket = WebSocket.w3cwebsocket;
 
 
-ChatWebAPIUtils.getAllMessages();
 var Application = React.createClass({
   SendAuth: function () {
     var ws = new WebSocket("ws://185.49.69.143:20080");
