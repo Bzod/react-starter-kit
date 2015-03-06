@@ -50,41 +50,41 @@ var Application = React.createClass({
     return (
         //React.DOM.input( {type:"submit", value:"Refresh", onClick:this.SendAuth} )
       /* jshint ignore:start */
-
-      <div className="App">
-      {this.props.path != '/' &&
-        <div className="navigation">
-            <Navbar/>
-            <AsidePanel/>
-        </div>
-        }
-        {
-        this.props.path === '/map' ?
-          <div className="map-container">
-            <Map/>
-            <RT/>
-          </div>:
-          <div className="container">
-            <h2>{page.title}</h2>
-          </div>
-          }
-        {
-        this.props.path != '/map' &&
-        <ContentPage className="container" {...page}/>
-          }
-        {
-          this.props.path != '/map' &&
-        <div className="navbar-footer">
-          <div className="container">
-            <p className="text-muted">
-              <span>© MobileRoute</span>
-              <span><a href="/">Home</a></span>
-              <span><a href="/privacy">Privacy</a></span>
-            </p>
-          </div>
-        </div>
-        }
-      </div>
+      <ContentPage className="container-fluid" {...page}/>
+      //<div className="App">
+      //{this.props.path != '/' &&
+      //  <div className="navigation">
+      //      <Navbar/>
+      //      <AsidePanel/>
+      //  </div>
+      //  }
+      //  {
+      //  this.props.path === '/map' ?
+      //    <div className="map-container">
+      //      <Map/>
+      //      <RT/>
+      //    </div>:
+      //    <div className="container">
+      //      <h2>{page.title}</h2>
+      //    </div>
+      //    }
+      //  {
+      //  this.props.path != '/map' &&
+      //  <ContentPage className="container" {...page}/>
+      //    }
+      //  {
+      //    this.props.path != '/map' &&
+      //  <div className="navbar-footer">
+      //    <div className="container">
+      //      <p className="text-muted">
+      //        <span>© MobileRoute</span>
+      //        <span><a href="/">Home</a></span>
+      //        <span><a href="/privacy">Privacy</a></span>
+      //      </p>
+      //    </div>
+      //  </div>
+      //  }
+      //</div>
       /* jshint ignore:end */
     );
   }

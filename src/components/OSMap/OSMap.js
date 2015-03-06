@@ -1,6 +1,3 @@
-/** @jsx React.DOM */
-/*jshint indent: 2, node: true, nomen: true, browser: true*/
-/*global React */
 import React from 'react';
 var cords = [[51.508, -0.11],[52.508, -0.11],[53.508, -1.11],[43.508, -1.11]];
 var point;

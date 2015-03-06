@@ -61,19 +61,19 @@ var config = {
       },
       {
         test: /\.gif/,
-        loader: 'url-loader?limit=10000&mimetype=image/gif'
+        loader: 'url-loader?limit=10000&mimetype=images/gif'
       },
       {
         test: /\.jpg/,
-        loader: 'url-loader?limit=10000&mimetype=image/jpg'
+        loader: 'url-loader?limit=10000&mimetype=images/jpg'
       },
       {
         test: /\.png/,
-        loader: 'url-loader?limit=10000&mimetype=image/png'
+        loader: 'url-loader?limit=10000&mimetype=images/png'
       },
       {
         test: /\.svg/,
-        loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+        loader: 'url-loader?limit=10000&mimetype=images/svg+xml'
       },
       {
         test: /\.jsx?$/,

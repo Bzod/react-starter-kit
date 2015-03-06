@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-/** @jsx React.DOM */
 import React from 'react';
 import Griddle from'griddle-react';
 
