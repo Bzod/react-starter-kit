@@ -50,7 +50,7 @@ var Application = React.createClass({
     return (
         //React.DOM.input( {type:"submit", value:"Refresh", onClick:this.SendAuth} )
       /* jshint ignore:start */
-      <ContentPage className="container-fluid" {...page}/>
+        <ContentPage className="container-fluid" {...page}/>
       //<div className="App">
       //{this.props.path != '/' &&
       //  <div className="navigation">
