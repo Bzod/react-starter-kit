@@ -1,11 +1,3 @@
-/*
- * React.js Starter Kit
- * Copyright (c) 2014 Konstantin Tarkus (@koistya), KriaSoft LLC.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 'use strict';
 
 // Include Gulp and other build automation tools and utilities
@@ -16,13 +8,10 @@ var del = require('del');
 var path = require('path');
 var runSequence = require('run-sequence');
 var webpack = require('webpack');
-var pagespeed = require('psi');
 var argv = require('minimist')(process.argv.slice(2));
 
 // Settings
-var DEST = './build';                         // The build output folder
 var RELEASE = !!argv.release;                 // Minimize and optimize during a build?
-var GOOGLE_ANALYTICS_ID = 'UA-XXXXX-X';       // https://www.google.com/analytics/web/
 var AUTOPREFIXER_BROWSERS = [                 // https://github.com/ai/autoprefixer
   'ie >= 10',
   'ie_mob >= 10',
@@ -37,31 +26,42 @@ var AUTOPREFIXER_BROWSERS = [                 // https://github.com/ai/autoprefi
 
 var src = {};
 var watch = false;
-var browserSync;
 
 // The default task
-gulp.task('default', ['sync']);
+gulp.task('default', ['serve']);
 
-// Clean up
-gulp.task('clean', del.bind(null, [DEST]));
+// Clean output directory
+gulp.task('clean', del.bind(
+  null, ['.tmp', 'build/*', '!build/.git'], {dot: true}
+));
+
+//gulp.task('components', function() {
+//    src.components = [
+//        'source/components/**/*.*'
+//    ];
+//    return gulp.src(src.components)
+//        .pipe($.changed('build'))
+//        .pipe(gulp.dest('build'))
+//        .pipe($.size({title: 'components'}));
+//});
 
 // 3rd party libraries
 gulp.task('vendor', function() {
-  return gulp.src('./node_modules/bootstrap/dist/fonts/**')
-    .pipe(gulp.dest(DEST + '/fonts'));
+  return gulp.src('node_modules/bootstrap/dist/fonts/**')
+    .pipe(gulp.dest('build/fonts'));
 });
 
 // Static files
-gulp.task('assets', function() {
-  src.assets = [
+gulp.task('static', function() {
+  src.static = [
     'src/assets/**',
     'src/content*/**/*.*',
     'src/templates*/**/*.*'
   ];
-  return gulp.src(src.assets)
-    .pipe($.changed(DEST))
-    .pipe(gulp.dest(DEST))
-    .pipe($.size({title: 'assets'}));
+  return gulp.src(src.static)
+    .pipe($.changed('build'))
+    .pipe(gulp.dest('build'))
+    .pipe($.size({title: 'static'}));
 });
 
 // CSS style sheets
@@ -77,7 +77,7 @@ gulp.task('styles', function() {
     .pipe($.autoprefixer({browsers: AUTOPREFIXER_BROWSERS}))
     .pipe($.csscomb())
     .pipe($.if(RELEASE, $.minifyCss()))
-    .pipe(gulp.dest(DEST + '/css'))
+    .pipe(gulp.dest('build/css'))
     .pipe($.size({title: 'styles'}));
 });
 
@@ -111,15 +111,16 @@ gulp.task('bundle', function(cb) {
 
 // Build the app from source code
 gulp.task('build', ['clean'], function(cb) {
-  runSequence(['vendor', 'assets', 'styles', 'bundle'], cb);
+  runSequence(['vendor', 'static', 'styles', 'bundle'], cb);
 });
 
 // Build and start watching for modifications
 gulp.task('build:watch', function(cb) {
   watch = true;
   runSequence('build', function() {
-    gulp.watch(src.assets, ['assets']);
+    gulp.watch(src.static, ['static']);
     gulp.watch(src.styles, ['styles']);
+    gulp.watch(src.components, ['components']);
     cb();
   });
 });
@@ -127,9 +128,9 @@ gulp.task('build:watch', function(cb) {
 // Launch a Node.js/Express server
 gulp.task('serve', ['build:watch'], function(cb) {
   src.server = [
-    DEST + '/server.js',
-    DEST + '/content/**/*',
-    DEST + '/templates/**/*'
+    'build/server.js',
+    'build/content/**/*',
+    'build/templates/**/*'
   ];
 
   var started = false;
@@ -137,17 +138,14 @@ gulp.task('serve', ['build:watch'], function(cb) {
   var assign = require('react/lib/Object.assign');
 
   var server = (function startup() {
-    var child = cp.fork(DEST + '/server.js', {
-      env: assign({ NODE_ENV: 'development' }, process.env)
+    var child = cp.fork('build/server.js', {
+      env: assign({NODE_ENV: 'development'}, process.env)
     });
     child.once('message', function(message) {
       if (message.match(/^online$/)) {
-        if (browserSync) {
-          browserSync.reload();
-        }
         if (!started) {
           started = true;
-          gulp.watch(src.server, function (file) {
+          gulp.watch(src.server, function() {
             $.util.log('Restarting development server.');
             server.kill('SIGTERM');
             server = startup();
@@ -164,29 +162,12 @@ gulp.task('serve', ['build:watch'], function(cb) {
   });
 });
 
-// Launch BrowserSync development server
+
 gulp.task('sync', ['serve'], function(cb) {
-  browserSync = require('browser-sync');
-
-  browserSync({
-    notify: false,
-    // Run as an https by setting 'https: true'
-    // Note: this uses an unsigned certificate which on first access
-    //       will present a certificate warning in the browser.
-    https: false,
-    // Informs browser-sync to proxy our Express app which would run
-    // at the following location
-    proxy: 'localhost:5000'
-  }, cb);
-
-  process.on('exit', function() {
-    browserSync.exit();
-  });
-
-  gulp.watch([DEST + '/**/*.*'].concat(
+  gulp.watch(['build/**/*.*'].concat(
     src.server.map(function(file) {return '!' + file;})
   ), function(file) {
-    browserSync.reload(path.relative(__dirname, file.path));
+    console.log(path.relative(__dirname, file.path));
   });
 });
 
@@ -196,14 +177,14 @@ gulp.task('deploy', function() {
   // Remove temp folder
   if (argv.clean) {
     var os = require('os');
-    var path = require('path');
     var repoPath = path.join(os.tmpdir(), 'tmpRepo');
     $.util.log('Delete ' + $.util.colors.magenta(repoPath));
     del.sync(repoPath, {force: true});
   }
 
-  return gulp.src(DEST + '/**/*')
-    .pipe($.if('**/robots.txt', !argv.production ? $.replace('Disallow:', 'Disallow: /') : $.util.noop()))
+  return gulp.src('build/**/*')
+    .pipe($.if('**/robots.txt', !argv.production ?
+      $.replace('Disallow:', 'Disallow: /') : $.util.noop()))
     .pipe($.ghPages({
       remoteUrl: 'https://github.com/{name}/{name}.github.io.git',
       branch: 'master'
@@ -212,6 +193,7 @@ gulp.task('deploy', function() {
 
 // Run PageSpeed Insights
 gulp.task('pagespeed', function(cb) {
+  var pagespeed = require('psi');
   // Update the below URL to the public URL of your site
   pagespeed.output('example.com', {
     strategy: 'mobile'

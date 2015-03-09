@@ -1,27 +1,20 @@
-/*
- * React.js Starter Kit
- * Copyright (c) 2014 Konstantin Tarkus (@koistya), KriaSoft LLC.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 'use strict';
 
-import _ from 'lodash';
-import fs from 'fs';
-import path from 'path';
-import express from 'express';
-import React from 'react';
-import Dispatcher from './core/Dispatcher';
-import ActionTypes from './constants/ActionTypes';
-import AppStore from './stores/AppStore';
+var _ = require('lodash');
+var fs = require( 'fs');
+var path = require('path');
+var express = require( 'express');
+var React = require( 'react');
+
+var Dispatcher  = require(  './core/Dispatcher');
+var ActionTypes  = require(  './constants/ActionTypes');
+var AppStore  = require(  './stores/AppStore');
 
 var server = express();
 
 server.set('port', (process.env.PORT || 5000));
 server.use(express.static(path.join(__dirname)));
-
+//server.use(logger('dev'));
 //
 // Page API
 // -----------------------------------------------------------------------------
@@ -56,44 +49,45 @@ server.get('*', function(req, res) {
 // Load pages from the `/src/content/` folder into the AppStore
 (function() {
   var assign = require('react/lib/Object.assign');
-  var fm = require('front-matter');
-  var jade = require('jade');
-  var sourceDir = path.join(__dirname, './content');
-  var getFiles = function(dir) {
+  var sourcePages = require('./db/fakeDB.js');
+  var getPages = function(data) {
     var pages = [];
-    fs.readdirSync(dir).forEach(function(file) {
-      var stat = fs.statSync(path.join(dir, file));
-      if (stat && stat.isDirectory()) {
-        pages = pages.concat(getFiles(file));
-      } else {
-        // Convert the file to a Page object
-        var filename = path.join(dir, file);
-        var url = filename.
-          substr(sourceDir.length, filename.length - sourceDir.length - 5)
-          .replace('\\', '/');
-        if (url.indexOf('/index', url.length - 6) !== -1) {
-          url = url.substr(0, url.length - (url.length > 6 ? 6 : 5));
-        }
-        var source = fs.readFileSync(filename, 'utf8');
-        var content = fm(source);
-        var html = jade.render(content.body, null, '  ');
-        var page = assign({}, {path: url, body: html}, content.attributes);
-        Dispatcher.handleServerAction({
-          actionType: ActionTypes.LOAD_PAGE,
-          path: url,
-          page: page
-        });
-      }
-    });
+    for(var i in data) {
+      var attr = data[i];
+      var page = assign({}, {path: attr.path, body: attr.body}, attr.attributes);
+      Dispatcher.handleServerAction({
+        actionType: ActionTypes.LOAD_PAGE,
+        path: attr.path,
+        page: page
+      });
+    }
     return pages;
   };
-  return getFiles(sourceDir);
+  return getPages(sourcePages);
 })();
 
-server.listen(server.get('port'), function() {
-  if (process.send) {
-    process.send('online');
-  } else {
-    console.log('The server is running at http://localhost:' + server.get('port'));
-  }
+
+// development error handler
+// will print stacktrace
+if (server.get('env') === 'development') {
+  server.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+server.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
+
+
+module.exports = server;

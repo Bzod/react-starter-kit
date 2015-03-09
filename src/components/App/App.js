@@ -9,23 +9,25 @@ import ContentPage from '../ContentPage';
 import NotFoundPage from '../NotFoundPage';
 import AsidePanel from '../AsidePanel';
 import Map from '../OSMap';
-import RT from '../RouteTable/RT';
+import RT from '../RT/RT.js';
 import WebSocket from 'websocket';
 WebSocket = WebSocket.w3cwebsocket;
 
 
+
 var Application = React.createClass({
-  SendAuth: function () {
-    var ws = new WebSocket("ws://185.49.69.143:20080");
-    ws.onopen = function () {
-      console.log('conected');
-      ws.send(JSON.stringify({"pid": 1, "method": "auth.login", "data": {"login": "Anton", "password": "pass123"}}));
-    };
-    ws.onmessage = function (message) {
-      var str = message.data.substring(0, message.data.length - 1);
-      console.log(JSON.parse(str))
-    };
-  },
+
+  //SendAuth: function () {
+  //  var ws = new WebSocket("ws://185.49.69.143:20080");
+  //  ws.onopen = function () {
+  //    console.log('conected');
+  //    ws.send(JSON.stringify({"pid": 1, "method": "auth.login", "data": {"login": "Anton", "password": "pass123"}}));
+  //  };
+  //  ws.onmessage = function (message) {
+  //    var str = message.data.substring(0, message.data.length - 1);
+  //    console.log(JSON.parse(str))
+  //  };
+  //},
 
   mixins: [NavigationMixin],
 
@@ -35,9 +37,9 @@ var Application = React.createClass({
     onSetMeta: React.PropTypes.func.isRequired,
     onPageNotFound: React.PropTypes.func.isRequired
   },
-  componentWillMount: function () {
-    this.SendAuth();
-  },
+  //componentWillMount: function () {
+  //  this.SendAuth();
+  //},
   render() {
     var page = AppStore.getPage(this.props.path);
     invariant(page !== undefined, 'Failed to load page content.');

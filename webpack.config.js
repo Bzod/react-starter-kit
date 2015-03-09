@@ -105,7 +105,7 @@ var appConfig = update(config, {
 
 // Configuration for the server-side bundle
 var serverConfig = update(config, {
-  entry: {$set: './src/server.js'},
+  entry: {$set: './src/bin/startup.js'},
   output: {
     filename: {$set: 'server.js'},
     libraryTarget: {$set: 'commonjs2'}

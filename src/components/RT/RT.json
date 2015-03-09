@@ -1,5 +1,5 @@
 {
-  "name": "RouteTable",
+  "name": "RT",
   "version": "0.0.0",
   "private": true,
   "main": "./RT.js"
