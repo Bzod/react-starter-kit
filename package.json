@@ -19,7 +19,9 @@
     "griddle-react": "^0.2.4",
     "jade": "1.9.2",
     "lodash": "3.2.0",
+    "morgan": "^1.5.1",
     "react": "0.12.2",
+    "react-bootstrap": "^0.16.1",
     "superagent": "0.21.0",
     "underscore": "^1.8.2"
   },
