@@ -1,17 +1,11 @@
 'use strict';
 
 import React from 'react';
+import App from '../../App/App.js';
+import SessionStore from '../../../stores/SessionStore.js';
+import AppActions from '../../../actions/AppActions';
 
 var ModalLogin = React.createClass({
-  getInitialState: function() {
-    return {
-        name: '',
-        pass: ''
-    };
-  },
-  handleChange: function(event) {
-    this.setState({name: event.target.name,pass: event.target.pass});
-  },
   render: function() {
     return (
       <div>
@@ -26,11 +20,11 @@ var ModalLogin = React.createClass({
                 <form>
                   <div className="form-group">
                     <label htmlFor="exampleInputEmail1">Логин</label>
-                    <input type="text" className="form-control" id="exampleInputEmail1" placeholder="Введите логин" ref="name" defaultValue={this.props.name} onChange={this.handleChange}/>
+                    <input type="text" className="form-control" id="exampleInputEmail1" placeholder="Введите логин" ref="name" defaultValue=""/>
                   </div>
                     <div className="form-group">
                       <label htmlFor="exampleInputPassword1">Пароль</label>
-                      <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Введите пароль" ref="pass" defaultValue={this.props.pass} onChange={this.handleChange}/>
+                      <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Введите пароль" ref="pass" defaultValue=""/>
                     </div>
                 </form>
               </div>
@@ -47,16 +41,15 @@ var ModalLogin = React.createClass({
   authReq: function(e) {
     e.preventDefault();
     var data = {
-      name     : this.refs.name.getDOMNode().value,
+      name : this.refs.name.getDOMNode().value,
       pass : this.refs.pass.getDOMNode().value
     };
-
     if (!data){
     console.log("err")}
     var ws = new WebSocket("ws://185.49.69.143:20080");
     ws.onopen = function () {
       console.log('conected');
-      console.log(data.name, "name", data.pass, 'pass')
+//      console.log(data.name, "name", data.pass, 'pass');
       ws.send(JSON.stringify({
         "pid": 1,
         "method": "auth.login",
@@ -64,28 +57,34 @@ var ModalLogin = React.createClass({
       }));
     };
     ws.onmessage = function (message) {
-      var str = message.data.substring(0, message.data.length - 1);
-      console.log(JSON.parse(str))
+      var str = JSON.parse(message.data.substring(0, message.data.length - 1));
+      console.log(str, 'onmessage');
+      switch (str.type){
+              case 'response':
+                AppActions.loginUser(str.data, function(err,callback){
+                  if (err){
+                    throw err
+                  }
+                  console.log(callback);
+                  AppActions.loadPage("/map", function(err){
+                    if (err){
+                      throw err
+                    }
+                    AppActions.navigateTo("/map");
+                  });
+                });
+                break;
+              case 'error':
+                console.log(str, 'error');
+                break;
+              default:
+                console.log(str, 'default');
+                break;
+      }
+
     };
   }
 });
-var authReq = function(event) {
-  event.preventDefault();
-  console.log(event,"event from auth");
-  //var ws = new WebSocket("ws://185.49.69.143:20080");
-  //ws.onopen = function () {
-  //  console.log('conected');
-  //  ws.send(JSON.stringify({
-  //    "pid": 1,
-  //    "method": "auth.login",
-  //    "data": {"login": event.name, "password": event.pass}
-  //  }));
-  //};
-  //ws.onmessage = function (message) {
-  //  var str = message.data.substring(0, message.data.length - 1);
-  //  console.log(JSON.parse(str))
-  //};
-};
 
 var ModalRegistration = React.createClass({
   render: function() {
@@ -135,7 +134,7 @@ var Header = React.createClass({
                   <li>
                     <a className="scroll" href="#Contact">Контакты</a>
                   </li>
-                    <button bsStyle="primary" bsSize="medium" data-toggle="modal" data-target="#myModal">Войти</button>
+                    <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#myModal">Войти</button>
                 </ul>
               </div>
             </div>
@@ -153,7 +152,6 @@ var Header = React.createClass({
               <div className="buttons">
                 <p>
                     <button className="btn btn-success btn-lg">Начать сейчас</button>
-                    <button className="btn btn-warning btn-lg" href="#About">Узнать больше</button>
                 </p>
               </div>
             </div>

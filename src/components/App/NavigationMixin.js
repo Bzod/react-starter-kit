@@ -5,7 +5,6 @@ import ExecutionEnvironment from 'react/lib/ExecutionEnvironment';
 import AppActions from '../../actions/AppActions';
 
 var NavigationMixin = {
-
   componentDidMount() {
     if (ExecutionEnvironment.canUseDOM) {
       window.addEventListener('popstate', this.handlePopState);
@@ -16,16 +15,6 @@ var NavigationMixin = {
   componentWillUnmount() {
     window.removeEventListener('popstate', this.handlePopState);
     window.removeEventListener('click', this.handleClick);
-  },
-
-  handlePopState(event) {
-    if (event.state) {
-      var path = event.state.path;
-      // TODO: Replace current location
-      // replace(path, event.state);
-    } else {
-      AppActions.navigateTo(window.location.pathname);
-    }
   },
 
   handleClick(event) {

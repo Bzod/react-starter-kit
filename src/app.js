@@ -27,12 +27,19 @@ var setMetaTag = (name, content) => {
 
 function run() {
   // Render the top-level React component
+  var user = JSON.parse(localStorage.getItem("session"));
+  if (user === null){
+    user = {0:"not authorized"};
+    return user
+  }
   var props = {
+    user: user,
     path: path,
     onSetTitle: (title) => document.title = title,
     onSetMeta: setMetaTag,
     onPageNotFound: emptyFunction
   };
+  console.log(props);
   var component = React.createElement(App, props);
   var app = React.render(component, document.body);
 

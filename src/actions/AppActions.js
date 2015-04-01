@@ -1,10 +1,3 @@
-/*
- * React.js Starter Kit
- * Copyright (c) 2014 Konstantin Tarkus (@koistya), KriaSoft LLC.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
 
 'use strict';
 
@@ -19,7 +12,6 @@ module.exports = {
     if (ExecutionEnvironment.canUseDOM) {
       window.history.pushState({}, document.title, path);
     }
-
     Dispatcher.handleViewAction({
       actionType: ActionTypes.CHANGE_LOCATION, path: path
     });
@@ -40,6 +32,16 @@ module.exports = {
           cb();
         }
       });
+  },
+
+  loginUser(data, callback){
+    localStorage.clear();
+    localStorage.setItem('session', JSON.stringify(data));
+    Dispatcher.handleViewAction({
+      actionType: ActionTypes.AUTH_SIGNIN,
+      data: data
+    });
+    callback(null,"User authorized");
   }
 
 };

@@ -1,7 +1,6 @@
 /**
  * Module dependencies.
  */
-
 var serverApp = require('../server.js');
 var debug = require('debug')('MobileRoute');
 var http = require('http');

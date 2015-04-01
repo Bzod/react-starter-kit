@@ -6,9 +6,10 @@ var fs = require('fs');
 var _ = require( 'lodash');
 var path = require('path');
 var AppStore =require('../stores/AppStore');
+var SessionStore =require('../stores/SessionStore');
 var Dispatcher = require( '../core/Dispatcher');
 var ActionTypes = require( '../constants/ActionTypes');
-var App = React.createFactory(require('../components/App'));
+var App = new React.createFactory(require('../components/App'));
 var templateFile = path.join(__dirname, 'templates/index.html');
 var template = _.template(fs.readFileSync(templateFile, 'utf8'));
 //
@@ -38,11 +39,13 @@ module.exports = function(answer) {
   answer.get('/api/page/*', function(req, res) {
     var urlPath = req.path.substr(9);
     var page = AppStore.getPage(urlPath);
+    page.user = SessionStore.isLoggedIn('Test');
     res.send(page);
   });
   answer.get('*', function (req, res) {
       var data = {description: ''};
       var app = new App({
+        user: {},
         path: req.path,
         onSetTitle: function (title) {
           data.title = title;

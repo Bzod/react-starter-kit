@@ -13,6 +13,7 @@ require('./routes/reactRoute')(server);
 // error handlers
 // development error handler
 // will print stacktrace
+
 if (server.get('env') === 'development') {
   server.use(function(err, req, res, next) {
     res.status(err.status || 500);

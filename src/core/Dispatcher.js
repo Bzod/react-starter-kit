@@ -39,7 +39,7 @@ var Dispatcher = assign(new Flux.Dispatcher(), {
       source: PayloadSources.VIEW_ACTION,
       action: action
     };
-    console.log(payload);
+    console.log(payload,"Dispatcher VIEW_ACTION");
     this.dispatch(payload);
   }
 

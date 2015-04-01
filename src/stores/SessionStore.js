@@ -8,16 +8,14 @@ import assign from 'react/lib/Object.assign';
 
 var CHANGE_EVENT = 'change';
 
-var _pages = {};
-var _loading = false;
+var _users = {};
+console.log(_users,'user in store');
 
 if (__SERVER__) {
-  _pages['/'] = {title: 'Home Page'};
-  _pages['/privacy'] = {title: 'Privacy Policy'};
-  _pages['/map'] = {title: 'Map'};
+  _users['Test'] = 'Test';
 }
-//console.log(_pages,'_pages started');
-var AppStore = assign({}, EventEmitter.prototype, {
+console.log(_users,'if (__SERVER__)');
+var SessionStore = assign({}, EventEmitter.prototype, {
 
   /**
    * Gets page data by the given URL path.
@@ -25,12 +23,9 @@ var AppStore = assign({}, EventEmitter.prototype, {
    * @param {String} path URL path.
    * @returns {*} Page data.
    */
-  getPage(path) {
-    //console.log(_pages,'getPage');
-    //console.log(path,'getPage');
-    //console.log(_pages[path],'_pages[path] getPage');
-    return path in _pages ? _pages[path] : {
-      title: 'Page Not Found',
+  isLoggedIn(user) {
+    return user in _users ? _users[user] : {
+      name: 'Пользователь не найден',
       type: 'notfound'
     };
   },
@@ -64,28 +59,14 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
 });
 
-AppStore.dispatcherToken = Dispatcher.register((payload) => {
+SessionStore.dispatcherToken = Dispatcher.register((payload) => {
   var action = payload.action;
-
-  switch (action.actionType) {
-
-    case ActionTypes.LOAD_PAGE:
-      if (action.source === PayloadSources.VIEW_ACTION) {
-        _loading = true;
-      } else {
-        if (!action.err) {
-          _pages[action.path] = action.page;
-          //console.log(_pages,'ActionTypes.LOAD_PAGE');
-        }
+  if (action.actionType === ActionTypes.AUTH_SIGNIN) {
+      if (!action.err) {
+        _users[action.data.id] = action.data;
+        SessionStore.emitChange();
       }
-      AppStore.emitChange();
-      break;
-
-    default:
-      // Do nothing
+    // Do nothing
   }
-
 });
-
-module.exports = AppStore;
-
+module.exports = SessionStore;
